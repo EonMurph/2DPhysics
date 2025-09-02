@@ -6,8 +6,14 @@
 #define HEIGHT 600
 #define NUM_RECTS 2
 
-SDL_Rect create_rect(int, int);
-void draw_rect(SDL_Renderer *, SDL_Rect);
+typedef struct {
+    int x;
+    int y;
+    int size;
+} Rect;
+
+Rect create_rect(int, int);
+void draw_rect(SDL_Renderer *, Rect);
 
 void print_error(char *type) {
     fprintf(stderr, "SDL %s failed to initialise: %s\n", type, SDL_GetError());
@@ -34,12 +40,12 @@ int main() {
         return 1;
     }
 
-    SDL_Rect rects[NUM_RECTS];
+    Rect rects[NUM_RECTS];
     for (int i = 0; i < NUM_RECTS; i++) {
         rects[i] = create_rect(rand() % WIDTH, rand() % HEIGHT);
     }
     int current_rect = 0;
-    SDL_Rect rect;
+    Rect rect;
 
     SDL_RaiseWindow(window);
     SDL_PumpEvents();
@@ -80,12 +86,13 @@ int main() {
     return 0;
 }
 
-SDL_Rect create_rect(int x, int y) {
+Rect create_rect(int x, int y) {
     int size = 100;
-    SDL_Rect rect = (SDL_Rect){x - (size / 2), y - (size / 2), size, size};
+    Rect rect = (Rect){x - (size / 2), y - (size / 2), size};
     return rect;
 }
 
-void draw_rect(SDL_Renderer *renderer, SDL_Rect rect) {
-    SDL_RenderFillRect(renderer, &rect);
+void draw_rect(SDL_Renderer *renderer, Rect rect) {
+    SDL_RenderFillRect(renderer,
+                       &(SDL_Rect){rect.x, rect.y, rect.size, rect.size});
 }
