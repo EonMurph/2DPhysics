@@ -4,8 +4,9 @@
 
 #define WIDTH 800
 #define HEIGHT 600
+#define NUM_RECTS 2
 
-SDL_Rect create_rect(SDL_Rect *, int *);
+SDL_Rect create_rect(int, int);
 void draw_rect(SDL_Renderer *, SDL_Rect);
 
 void print_error(char *type) {
@@ -33,9 +34,10 @@ int main() {
         return 1;
     }
 
-    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-
-    SDL_Rect rects[2];
+    SDL_Rect rects[NUM_RECTS];
+    for (int i = 0; i < NUM_RECTS; i++) {
+        rects[i] = create_rect(rand() % WIDTH, rand() % HEIGHT);
+    }
     int current_rect = 0;
     SDL_Rect rect;
 
@@ -43,6 +45,7 @@ int main() {
     SDL_PumpEvents();
     SDL_Event e;
     int running = 1;
+    int mouse_x, mouse_y;
     while (running) {
         while (SDL_PollEvent(&e)) {
             switch (e.type) {
@@ -53,11 +56,19 @@ int main() {
                         running = 0;
                     }
                 case SDL_MOUSEBUTTONDOWN:
-                    rect = create_rect(rects, &current_rect);
-                    draw_rect(renderer, rect);
+                    SDL_GetMouseState(&mouse_x, &mouse_y);
+                    rect = create_rect(mouse_x, mouse_y);
+                    rects[current_rect] = rect;
+                    current_rect = (current_rect + 1) % NUM_RECTS;
                 default:
                     continue;
             }
+        }
+        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+        SDL_RenderClear(renderer);
+        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+        for (int i = 0; i < NUM_RECTS; i++) {
+            draw_rect(renderer, rects[i]);
         }
         SDL_RenderPresent(renderer);
     }
@@ -69,11 +80,9 @@ int main() {
     return 0;
 }
 
-SDL_Rect create_rect(SDL_Rect * rects, int * current_rect) {
-    SDL_Rect rect = (SDL_Rect){rand() % WIDTH, rand() % HEIGHT, 100, 100};
-    rects[*current_rect] = rect;
-    current_rect++;
-
+SDL_Rect create_rect(int x, int y) {
+    int size = 100;
+    SDL_Rect rect = (SDL_Rect){x - (size / 2), y - (size / 2), size, size};
     return rect;
 }
 
