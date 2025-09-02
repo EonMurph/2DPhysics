@@ -7,9 +7,7 @@
 #define NUM_RECTS 2
 
 typedef struct {
-    int x;
-    int y;
-    int size;
+    int x, y, x_ax, y_ax, size;
 } Rect;
 
 Rect create_rect(int, int);
@@ -45,7 +43,6 @@ int main() {
         rects[i] = create_rect(rand() % WIDTH, rand() % HEIGHT);
     }
     int current_rect = 0;
-    Rect rect;
 
     SDL_RaiseWindow(window);
     SDL_PumpEvents();
@@ -63,8 +60,7 @@ int main() {
                     }
                 case SDL_MOUSEBUTTONDOWN:
                     SDL_GetMouseState(&mouse_x, &mouse_y);
-                    rect = create_rect(mouse_x, mouse_y);
-                    rects[current_rect] = rect;
+                    rects[current_rect] = create_rect(mouse_x, mouse_y);
                     current_rect = (current_rect + 1) % NUM_RECTS;
                 default:
                     continue;
@@ -74,7 +70,20 @@ int main() {
         SDL_RenderClear(renderer);
         SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
         for (int i = 0; i < NUM_RECTS; i++) {
-            draw_rect(renderer, rects[i]);
+            Rect *rect = &rects[i];
+            rect->x += rect->x_ax;
+            rect->y += rect->y_ax;
+            if (rect->x + rect->size > WIDTH) {
+                rect->x = 0 - rect->size;
+            } else if (rect->x + rect->size < 0) {
+                rect->x = WIDTH;
+            }
+            if (rect->y + rect->size > HEIGHT) {
+                rect->y = 0 - rect->size;
+            } else if (rect->y + rect->size < 0) {
+                rect->y = HEIGHT;
+            }
+            draw_rect(renderer, *rect);
         }
         SDL_RenderPresent(renderer);
     }
@@ -87,8 +96,8 @@ int main() {
 }
 
 Rect create_rect(int x, int y) {
-    int size = 100;
-    Rect rect = (Rect){x - (size / 2), y - (size / 2), size};
+    int size = 50;
+    Rect rect = (Rect){x - (size / 2), y - (size / 2), rand() % 4 + 1, rand() % 4 + 1, size};
     return rect;
 }
 
