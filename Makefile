@@ -20,6 +20,7 @@ LDLIBS = -lSDL2 -lm
 SRC_DIR = src
 OBJ_DIR = obj
 BIN_DIR = bin
+INC_DIR = include
 
 # Executable name
 EXEC = $(BIN_DIR)/main
@@ -28,6 +29,8 @@ EXEC = $(BIN_DIR)/main
 SRCS = $(wildcard $(SRC_DIR)/*.c)
 # Generate corresponding object file names in the object directory
 OBJS = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRCS))
+# Automatically find all .h files in the include directory
+INCS = $(wildcard $(INC_DIR)/*.h)
 
 # Phony targets do not represent files
 .PHONY: all build clean run
@@ -43,12 +46,12 @@ $(EXEC): $(OBJS) | $(BIN_DIR)
 	$(CC) $(LDFLAGS) -o $@ $^ $(LDLIBS)
 
 # Rule to compile source files into object files
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
-	$(CC) $(CFLAGS) $(CPPFLAGS) -c $< -o $@
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(INCS) | $(OBJ_DIR)
+	$(CC) $(CFLAGS) $(CPPFLAGS) -I$(INC_DIR) -c $< -o $@
 
 # Create directories if they don't exist.
 # This is an order-only prerequisite, so it runs only if the directory is missing.
-$(OBJ_DIR) $(BIN_DIR):
+$(OBJ_DIR) $(BIN_DIR) $(INC_DIR):
 	mkdir -p $@
 
 # Clean up build artifacts
