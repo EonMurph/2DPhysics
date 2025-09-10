@@ -1,6 +1,3 @@
-#include <SDL2/SDL.h>
-#include <stdio.h>
-#include <stdlib.h>
 #include "utils.h"
 
 void print_error(char *type) {

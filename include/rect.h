@@ -1,3 +1,8 @@
+#include <SDL2/SDL.h>
+#include <math.h>
+
+#include "utils.h"
+
 #define NUM_RECTS 10
 #define RECT_SIZE 50
 

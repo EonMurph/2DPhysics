@@ -1,7 +1,4 @@
-#include <SDL2/SDL.h>
-#include <math.h>
 #include "rect.h"
-#include "utils.h"
 
 Rect create_rect(int x, int y) {
     int size = RECT_SIZE;
@@ -9,8 +6,8 @@ Rect create_rect(int x, int y) {
     int max_ax = 5;
     int vx = rand_range(min_ax, max_ax);
     int vy = rand_range(min_ax, max_ax);
-    Rect rect = (Rect){x - ((float) size / 2.0f),
-                       y - ((float) size / 2.0f),
+    Rect rect = (Rect){x - ((float)size / 2.0f),
+                       y - ((float)size / 2.0f),
                        vx,
                        vy,
                        size,
@@ -52,7 +49,7 @@ void handle_bouncing(Rect *r1, Rect *r2) {
     if (dist == 0.0f) {
         return;
     }
-    
+
     // Calculate the normal of the collision and the velocity along that normal
     float nx = (r1_center[0] - r2_center[0]) / dist;
     float ny = (r1_center[1] - r2_center[1]) / dist;

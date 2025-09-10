@@ -1,4 +1,5 @@
 #include <SDL2/SDL.h>
+
 #include "rect.h"
 #include "utils.h"
 
@@ -28,7 +29,8 @@ int main() {
 
     Rect rects[NUM_RECTS];
     for (int i = 0; i < NUM_RECTS; i++) {
-        rects[i] = create_rect(rand_range(RECT_SIZE, WIDTH - RECT_SIZE), rand_range(RECT_SIZE, HEIGHT - RECT_SIZE));
+        rects[i] = create_rect(rand_range(RECT_SIZE, WIDTH - RECT_SIZE),
+                               rand_range(RECT_SIZE, HEIGHT - RECT_SIZE));
     }
     int current_rect = 0;
 
@@ -89,9 +91,8 @@ int main() {
                     handle_bouncing(&rects[i], &rects[collision_rect]);
                     SDL_SetRenderDrawColor(renderer, 200, 0, 200, 255);
                 } else {
-                    SDL_SetRenderDrawColor(renderer, 255 - (100 * i),
-                                           255, 255 - (100 * i),
-                                           255);
+                    SDL_SetRenderDrawColor(renderer, 255 - (100 * i), 255,
+                                           255 - (100 * i), 255);
                 }
                 draw_rect(renderer, rects[i]);
             }
