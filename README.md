@@ -1,4 +1,3 @@
 # 2DPhysics
-A simple 2D physics engine for learning C.
 
-W.I.P
+A simple 2D physics collision simulation for learning C.
