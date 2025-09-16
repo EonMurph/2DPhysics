@@ -5,7 +5,7 @@ A simple 2D physics collision simulation for learning C.
 Squares can be summoned to the mouse pointer by clicking anywhere on the screen.
 The game can be quit by pressing `q`.
 
-![Screen recording of the simulation](media/simulation_screen_recording.mov)
+![Screen recording of the simulation](media/simulation_screen_recording.gif)
 
 ## Running the Project
 
